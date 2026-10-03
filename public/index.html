@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事故处置情境演练编排台</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🚨 事故处置情境演练编排台</div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="trainer">培训师编排</button>
+      <button class="tab" data-tab="student">学员演练</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ================= 培训师编排 ================= -->
+    <section id="tab-trainer" class="tab-panel active">
+      <div class="trainer-layout">
+        <aside class="scenario-list">
+          <div class="row between">
+            <h2>情境库</h2>
+            <button id="btn-new-scenario" class="btn small">＋ 新建</button>
+          </div>
+          <div id="scenario-items" class="scenario-items"></div>
+        </aside>
+
+        <div class="editor">
+          <div id="editor-empty" class="empty-hint">请在左侧选择一个情境，或点击“新建”开始编排。</div>
+          <div id="editor-body" hidden>
+            <div class="editor-head row between wrap">
+              <input id="sc-title" class="input title-input" placeholder="情境标题">
+              <div class="row gap">
+                <button id="btn-save" class="btn">💾 保存草稿</button>
+                <button id="btn-check" class="btn">🔍 发布前检查</button>
+                <button id="btn-publish" class="btn primary">📌 保存并发布新版本</button>
+              </div>
+            </div>
+
+            <div id="report-box" class="report" hidden></div>
+
+            <section class="block">
+              <h3>现场布尔状态（至多 8 个）</h3>
+              <table class="grid">
+                <thead><tr><th>ID（英文）</th><th>显示名称</th><th>初始值</th><th></th></tr></thead>
+                <tbody id="states-tbody"></tbody>
+              </table>
+              <button id="btn-add-state" class="btn small">＋ 添加状态</button>
+            </section>
+
+            <section class="block">
+              <h3>起点节点</h3>
+              <select id="start-select" class="input"></select>
+            </section>
+
+            <section class="block">
+              <h3>情境节点与选项</h3>
+              <div id="nodes-box"></div>
+              <button id="btn-add-node" class="btn small">＋ 添加节点</button>
+            </section>
+
+            <section class="block">
+              <h3>已发布版本（内容冻结，老会话沿原版继续）</h3>
+              <div id="versions-box" class="versions"></div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 学员演练 ================= -->
+    <section id="tab-student" class="tab-panel">
+      <div id="student-start" class="student-wrap">
+        <div class="card">
+          <h2>开始演练</h2>
+          <label class="field-label">选择已发布情境（新会话使用最新版本）</label>
+          <select id="start-scenario" class="input"></select>
+          <button id="btn-start" class="btn primary big">▶ 开始最新版演练</button>
+          <hr>
+          <label class="field-label">已有会话码？输入后可继续（会话绑定其开始时的版本）</label>
+          <div class="row gap">
+            <input id="resume-sid" class="input" placeholder="会话码，例如 aB3xK9pQ1w2z">
+            <button id="btn-resume" class="btn">恢复会话</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="student-session" class="student-wrap" hidden>
+        <div class="session-head row between wrap">
+          <div>
+            <div id="ss-title" class="ss-title"></div>
+            <div class="muted">会话码：<code id="ss-sid"></code> · 当前第 <b id="ss-step"></b> 步 · <span id="ss-version"></span></div>
+          </div>
+          <div class="row gap">
+            <button id="btn-copy-link" class="btn small">复制恢复链接</button>
+            <button id="btn-exit-session" class="btn small">返回</button>
+          </div>
+        </div>
+
+        <div id="choice-toast" class="toast" hidden></div>
+
+        <div class="card">
+          <div class="row between">
+            <h2 id="ss-node-title"></h2>
+            <span id="ss-end-badge" class="badge end" hidden>已到结局</span>
+          </div>
+          <p id="ss-node-text" class="node-text"></p>
+
+          <h3>当前现场状态</h3>
+          <div id="ss-states" class="state-chips"></div>
+
+          <h3>可选项</h3>
+          <div id="ss-options" class="options"></div>
+          <div id="ss-unavailable"></div>
+        </div>
+
+        <div class="card">
+          <h3>走过的路径</h3>
+          <ol id="ss-path" class="path"></ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

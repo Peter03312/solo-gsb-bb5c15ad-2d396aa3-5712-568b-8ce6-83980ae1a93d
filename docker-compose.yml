@@ -1,0 +1,24 @@
+services:
+  drill-studio:
+    build: .
+    image: incident-drill-studio:latest
+    container_name: incident-drill-studio
+    ports:
+      - "3000:3000"
+    environment:
+      # 监听端口（容器内）；映射到宿主机的端口修改上面的 "宿主机端口:3000"
+      PORT: "3000"
+      DB_PATH: /app/data/drill.db
+    volumes:
+      # SQLite 数据持久化：删除/重建容器不丢失情境与会话
+      - drill-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  drill-data:
